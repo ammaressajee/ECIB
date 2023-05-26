@@ -1,17 +1,21 @@
 import 'package:ecib/provider/dark_theme_provider.dart';
-import 'package:ecib/screens/btm_bar.dart';
-import 'package:ecib/screens/home_screen.dart';
+import 'package:ecib/provider/internet_provider.dart';
+import 'package:ecib/provider/sign_in_provider.dart';
+import 'package:ecib/screens/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'consts/theme_data.dart';
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -38,7 +42,13 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) {
           return themeChangeProvider;
-        })
+        }),
+        ChangeNotifierProvider(
+          create: (context) => SignInProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => InternetProvider(),
+        )
       ],
       child:
           Consumer<DarkThemeProvider>(builder: (context, themeProvider, child) {
@@ -49,7 +59,7 @@ class _MyAppState extends State<MyApp> {
             themeProvider.getDarkTheme,
             context,
           ),
-          home: const BottomBarScreen(),
+          home: const SplashScreen(),
         );
       }),
     );

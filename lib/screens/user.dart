@@ -1,9 +1,13 @@
+import 'package:ecib/screens/login_screen.dart';
+import 'package:ecib/screens/splash_screen.dart';
+import 'package:ecib/utils/next_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../provider/dark_theme_provider.dart';
+import '../provider/sign_in_provider.dart';
 import '../widgets/text_widget.dart';
 
 class UserScreen extends StatefulWidget {
@@ -16,8 +20,10 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   final TextEditingController _addressTextController =
       TextEditingController(text: "");
+
   @override
   Widget build(BuildContext context) {
+    final sp = context.read<SignInProvider>();
     final themeState = Provider.of<DarkThemeProvider>(context);
     bool isDark = themeState.getDarkTheme;
     final Color color = themeState.getDarkTheme ? Colors.white : Colors.black;
@@ -49,21 +55,18 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     children: <TextSpan>[
                       TextSpan(
-                          text: 'Ammar Essajee',
+                          text: "Ammar Essajee",
                           style: TextStyle(
                             color: color,
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              print('test');
-                            })
+                          recognizer: TapGestureRecognizer()..onTap = () {})
                     ]),
               ),
               const SizedBox(height: 5),
               TextWidget(
-                  text: 'ammar@essajee.com',
+                  text: 'ammar.essajee@gmail.com',
                   color: isDark
                       ? const Color.fromARGB(255, 206, 204, 204)
                       : const Color.fromARGB(255, 60, 58, 58),
@@ -176,6 +179,7 @@ class _UserScreenState extends State<UserScreen> {
     const String logoutLogo = 'assets/images/sign-out.svg';
     final Widget logoutSvg =
         SvgPicture.asset(logoutLogo, semanticsLabel: 'Logout Logo');
+    final sp = context.read<SignInProvider>();
 
     await showDialog(
         context: context,
@@ -213,7 +217,11 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // logout
+                      sp.userSignOut();
+                      nextScreen(context, const LoginScreen());
+                    },
                     child: const Text('Yes'),
                   ),
                 ],
