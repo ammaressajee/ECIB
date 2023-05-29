@@ -157,6 +157,17 @@ class SignInProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // get data from shared preferences
+  Future getUserDataFromSharedPreferences() async {
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    _name = s.getString("name");
+    _email = s.getString("email");
+    _uid = s.getString("uid");
+    _imageUrl = s.getString("image_url");
+    _provider = s.getString("provider");
+    notifyListeners();
+  }
+
   // check if user exists in cloud firestore
   Future<bool> checkUserExists() async {
     DocumentSnapshot snap =

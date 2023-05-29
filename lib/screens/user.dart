@@ -1,5 +1,4 @@
 import 'package:ecib/screens/login_screen.dart';
-import 'package:ecib/screens/splash_screen.dart';
 import 'package:ecib/utils/next_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +21,18 @@ class _UserScreenState extends State<UserScreen> {
       TextEditingController(text: "");
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future getData() async {
     final sp = context.read<SignInProvider>();
+    sp.getUserDataFromSharedPreferences();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
     bool isDark = themeState.getDarkTheme;
     final Color color = themeState.getDarkTheme ? Colors.white : Colors.black;
@@ -34,43 +43,80 @@ class _UserScreenState extends State<UserScreen> {
       super.dispose();
     }
 
+    final sp = context.watch<SignInProvider>();
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 15),
-              RichText(
-                text: TextSpan(
-                    text: 'Hello, ',
-                    style: TextStyle(
-                      color: isDark
-                          ? const Color.fromARGB(255, 79, 241, 160)
-                          : const Color.fromARGB(251, 8, 109, 80),
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, right: 15),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 1,
+                              color: Colors.black,
+                              spreadRadius: .5)
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage("${sp.imageUrl}"),
+                        radius: 35,
+                      ),
                     ),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: "Ammar Essajee",
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                            text: 'Hello, ',
+                            style: TextStyle(
+                              color: isDark
+                                  ? const Color.fromARGB(255, 79, 241, 160)
+                                  : const Color.fromARGB(251, 8, 109, 80),
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: sp.name,
+                                  style: TextStyle(
+                                    color: color,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {})
+                            ]),
+                      ),
+                      //const SizedBox(height: 5),
+                      RichText(
+                        text: TextSpan(
+                          text: sp.email,
                           style: TextStyle(
-                            color: color,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          recognizer: TapGestureRecognizer()..onTap = () {})
-                    ]),
+                              color: isDark
+                                  ? const Color.fromARGB(255, 206, 204, 204)
+                                  : const Color.fromARGB(255, 60, 58, 58),
+                              fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              const SizedBox(height: 5),
-              TextWidget(
-                  text: 'ammar.essajee@gmail.com',
-                  color: isDark
-                      ? const Color.fromARGB(255, 206, 204, 204)
-                      : const Color.fromARGB(255, 60, 58, 58),
-                  fontSize: 18),
+              const SizedBox(
+                height: 3,
+              ),
               const Divider(
                 thickness: 2,
               ),
