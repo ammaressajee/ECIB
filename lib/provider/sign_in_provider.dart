@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +49,16 @@ class SignInProvider extends ChangeNotifier {
     final SharedPreferences s = await SharedPreferences.getInstance();
     s.setBool("signed_in", true);
     _isSignedIn = true;
+    notifyListeners();
+  }
+
+  void phoneNumberUser(User user, email, name) {
+    _name = name;
+    _email = email;
+    _imageUrl =
+        "https://winaero.com/blog/wp-content/uploads/2017/12/User-icon-256-blue.png";
+    _uid = user.phoneNumber;
+    _provider = "PHONE";
     notifyListeners();
   }
 
@@ -136,7 +148,7 @@ class SignInProvider extends ChangeNotifier {
   Future saveDataToFirestore() async {
     final DocumentReference r =
         FirebaseFirestore.instance.collection("users").doc(_uid);
-    await r.set({
+    await r.update({
       "name": _name,
       "email": _email,
       "imageUrl": _imageUrl,
@@ -165,6 +177,20 @@ class SignInProvider extends ChangeNotifier {
     _uid = s.getString("uid");
     _imageUrl = s.getString("image_url");
     _provider = s.getString("provider");
+    notifyListeners();
+  }
+
+  // save data to firestore
+  Future saveAddressToFirestore(String addressStreet, String addressCity,
+      String addressState, String addressZip) async {
+    final DocumentReference r =
+        FirebaseFirestore.instance.collection("users").doc(_uid);
+    await r.update({
+      "address_street": addressStreet,
+      "address_city": addressCity,
+      "address_state": addressState,
+      "address_zip": addressZip
+    });
     notifyListeners();
   }
 

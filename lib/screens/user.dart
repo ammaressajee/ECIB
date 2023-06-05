@@ -17,7 +17,13 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
-  final TextEditingController _addressTextController =
+  final TextEditingController _addressStreetTextController =
+      TextEditingController(text: "");
+  final TextEditingController _addressCityTextController =
+      TextEditingController(text: "");
+  final TextEditingController _addressStateTextController =
+      TextEditingController(text: "");
+  final TextEditingController _addressZipTextController =
       TextEditingController(text: "");
 
   @override
@@ -39,7 +45,10 @@ class _UserScreenState extends State<UserScreen> {
 
     @override
     void dispose() {
-      _addressTextController.dispose();
+      _addressStreetTextController.dispose();
+      _addressCityTextController.dispose();
+      _addressStateTextController.dispose();
+      _addressZipTextController.dispose();
       super.dispose();
     }
 
@@ -47,9 +56,10 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(10),
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
@@ -120,9 +130,6 @@ class _UserScreenState extends State<UserScreen> {
               const Divider(
                 thickness: 2,
               ),
-              const SizedBox(
-                height: 20,
-              ),
               _listTiles(
                 title: 'Address',
                 subtitle: 'My Address',
@@ -159,7 +166,8 @@ class _UserScreenState extends State<UserScreen> {
                     color: color,
                     fontSize: 20),
                 subtitle: TextWidget(
-                    text: 'Switch between dark/light themes',
+                    text:
+                        isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
                     color: isDark
                         ? const Color.fromARGB(255, 209, 209, 209)
                         : const Color.fromARGB(255, 72, 69, 69),
@@ -177,18 +185,40 @@ class _UserScreenState extends State<UserScreen> {
               ),
               _listTiles(
                 title: 'Forgot Password?',
-                subtitle: 'Click here to reset your password',
+                subtitle: 'Click to reset your password',
                 icon: IconlyLight.unlock,
                 onPressed: () {},
                 color: color,
               ),
               _listTiles(
                 title: 'Logout',
+                subtitle: 'Contine to logout',
                 icon: IconlyLight.logout,
                 onPressed: () async {
                   await _logoutDialog();
                 },
                 color: color,
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextWidget(
+                text: 'User Id: ${sp.uid}',
+                color: color,
+                fontSize: 15,
+                fontWeight: FontWeight.w300,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextWidget(
+                text: 'Provider: ${sp.provider}',
+                color: color,
+                fontSize: 15,
+                fontWeight: FontWeight.w300,
               ),
             ],
           ),
@@ -198,22 +228,57 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Future<void> _showAddressDialog() async {
+    final sp = context.read<SignInProvider>();
+    sp.getUserDataFromSharedPreferences();
     await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: const Text('Update'),
-            content: TextField(
-              //onChanged: (value) {},
-              controller: _addressTextController,
-              maxLines: 5,
-              decoration: const InputDecoration(hintText: 'Enter your address'),
+            content: Column(
+              children: [
+                TextField(
+                  //onChanged: (value) {},
+                  controller: _addressStreetTextController,
+                  maxLines: 2,
+                  decoration:
+                      const InputDecoration(hintText: 'Enter your address'),
+                ),
+                TextField(
+                  //onChanged: (value) {},
+                  controller: _addressCityTextController,
+                  maxLines: 1,
+                  decoration:
+                      const InputDecoration(hintText: 'Enter your city'),
+                ),
+                TextField(
+                  //onChanged: (value) {},
+                  controller: _addressStateTextController,
+                  maxLines: 1,
+                  decoration:
+                      const InputDecoration(hintText: 'Enter your state'),
+                ),
+                TextField(
+                  //onChanged: (value) {},
+                  controller: _addressZipTextController,
+                  maxLines: 1,
+                  decoration:
+                      const InputDecoration(hintText: 'Enter your zip code'),
+                ),
+              ],
             ),
             actions: [
               TextButton(
                   onPressed: () {
-                    print(
-                        '_addressTextController ${_addressTextController.text}');
+                    String addressStreet = _addressStreetTextController.text;
+                    String addressCity = _addressCityTextController.text;
+                    String addressState = _addressStateTextController.text;
+                    String addressZip = _addressZipTextController.text;
+                    sp.saveAddressToFirestore(
+                        addressStreet, addressCity, addressState, addressZip);
+                    if (Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    }
                   },
                   child: const Text('Update'))
             ],

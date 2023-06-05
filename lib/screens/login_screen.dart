@@ -1,6 +1,6 @@
 import 'package:ecib/provider/sign_in_provider.dart';
 import 'package:ecib/screens/btm_bar.dart';
-import 'package:ecib/screens/home_screen.dart';
+import 'package:ecib/screens/phone_auth_screen.dart';
 import 'package:ecib/utils/config.dart';
 import 'package:ecib/utils/next_screen.dart';
 import 'package:ecib/utils/snack_bar.dart';
@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/dark_theme_provider.dart';
 import '../provider/internet_provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,9 +25,13 @@ class _LoginScreenState extends State<LoginScreen> {
       RoundedLoadingButtonController();
   final RoundedLoadingButtonController appleController =
       RoundedLoadingButtonController();
+  final RoundedLoadingButtonController phoneController =
+      RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
+    final themeState = Provider.of<DarkThemeProvider>(context);
+    bool isDark = themeState.getDarkTheme;
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
@@ -44,30 +49,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 flex: 2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Image(
+                  children: [
+                    const Image(
                       image: AssetImage(Config.app_icon),
-                      height: 80,
-                      width: 80,
+                      height: 160,
+                      width: 175,
                       fit: BoxFit.cover,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       "Welcome to Essajee Carimjee Insurance Brokers (Pvt) Ltd",
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Text(
                       "Sign up or Login below:",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
-                        color: Color.fromARGB(255, 196, 193, 193),
+                        color: isDark
+                            ? Color.fromARGB(255, 188, 184, 184)
+                            : Color.fromARGB(255, 99, 98, 98),
                       ),
                     )
                   ],
@@ -116,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   RoundedLoadingButton(
                     controller: appleController,
                     onPressed: () {},
-                    color: const Color.fromARGB(200, 153, 221, 234),
+                    color: const Color.fromARGB(199, 19, 125, 146),
                     successColor: Colors.green,
                     width: MediaQuery.of(context).size.width * 0.8,
                     elevation: 0,
@@ -141,7 +148,39 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  RoundedLoadingButton(
+                    onPressed: () {
+                      nextScreenReplace(context, const PhoneAuthScreen());
+                      phoneController.reset();
+                    },
+                    controller: phoneController,
+                    successColor: Colors.black,
+                    width: MediaQuery.of(context).size.width * 0.80,
+                    elevation: 0,
+                    borderRadius: 25,
+                    color: Colors.black,
+                    child: Wrap(
+                      children: const [
+                        Icon(
+                          FontAwesomeIcons.phone,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text("Sign in with Phone",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
                 ],
               )
             ],
