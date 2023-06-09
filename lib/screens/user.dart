@@ -140,10 +140,12 @@ class _UserScreenState extends State<UserScreen> {
                 color: color,
               ),
               _listTiles(
-                title: 'Orders',
-                subtitle: 'View recent orders',
+                title: 'Profile',
+                subtitle: 'View my profile',
                 icon: IconlyLight.bag,
-                onPressed: () {},
+                onPressed: () {
+                  _viewProfileDialog();
+                },
                 color: color,
               ),
               _listTiles(
@@ -225,6 +227,73 @@ class _UserScreenState extends State<UserScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _viewProfileDialog() async {
+    final sp = context.read<SignInProvider>();
+    sp.getUserDataFromSharedPreferences();
+
+    String? profilePic = sp.imageUrl;
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(profilePic!),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    sp.name!,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  Text(
+                    sp.email!,
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    sp.provider!,
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  Center(
+                    child: Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            if (Navigator.canPop(context)) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: const Text(
+                            'No',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text('Yes'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   Future<void> _showAddressDialog() async {

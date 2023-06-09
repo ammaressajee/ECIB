@@ -45,8 +45,7 @@ dependencies:
   rounded_loading_button: ^2.1.0
   font_awesome_flutter: ^10.4.0
   connectivity_plus: ^4.0.1
-  flutter_aubio: ^0.0.1-dev.1
-  flutter_audio_recorder3: ^0.0.5
+  flutter_sound: ^9.2.13
   permission_handler: ^10.2.0
   flutter_svg: 
 

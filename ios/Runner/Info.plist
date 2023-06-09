@@ -19,6 +19,8 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Ecib</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This application needs access to your microphone to record audio</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -60,5 +62,17 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow this application to access your camera?</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow this application to access your Photo Library?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow this application to access your location while the app is open</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow this application to access your location</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Older devices need location.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Can I have location always?</string>
 </dict>
 </plist>
