@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ScaleFinderScreen extends StatefulWidget {
@@ -98,8 +100,9 @@ class _ScaleFinderScreenState extends State<ScaleFinderScreen> {
 
   Future startRecording() async {
     if (!isRecorderReady) return;
-    await recorder.startRecorder(
-        toFile: '/Users/ammaressajee/Documents/Projects/Flutter');
+    var tempDir = await getTemporaryDirectory();
+    String path = '${tempDir.path}/audio1.aac';
+    await recorder.startRecorder(toFile: path, codec: Codec.aacADTS);
   }
 
   Future initRecorder() async {

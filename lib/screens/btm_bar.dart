@@ -1,10 +1,12 @@
 import 'package:ecib/screens/about_us.dart';
+import 'package:ecib/screens/audio_player_screen.dart';
 import 'package:ecib/screens/cart.dart';
 import 'package:ecib/screens/categories.dart';
 import 'package:ecib/screens/home_screen.dart';
 import 'package:ecib/screens/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/dark_theme_provider.dart';
@@ -21,7 +23,8 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   final List<Map<String, dynamic>> _pages = [
     {'page': const HomeScreen(), 'title': 'Home'},
     {'page': const CategoriesScreen(), 'title': 'Categories'},
-    {'page': const ScaleFinderScreen(), 'title': 'Scale Finder'},
+    {'page': const ScaleFinderScreen(), 'title': 'Recording Studio'},
+    {'page': const AudioPlayerScreen(), 'title': 'Music Player'},
     {'page': const UserScreen(), 'title': 'User Profile'},
     {'page': const AboutUsScreen(), 'title': 'About Us'},
   ];
@@ -68,17 +71,24 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
               label: 'Categories',
             ),
             BottomNavigationBarItem(
-              icon:
-                  Icon(_selectedIndex == 2 ? IconlyBold.buy : IconlyLight.buy),
-              label: 'Cart',
+              icon: Icon(_selectedIndex == 2
+                  ? FontAwesomeIcons.microphoneLines
+                  : FontAwesomeIcons.microphoneLines),
+              label: 'Studio',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_selectedIndex == 3
+                  ? FontAwesomeIcons.headphones
+                  : FontAwesomeIcons.headphones),
+              label: 'Audio Player',
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                  _selectedIndex == 3 ? IconlyBold.user2 : IconlyLight.user2),
+                  _selectedIndex == 5 ? IconlyBold.user2 : IconlyLight.user2),
               label: 'User',
             ),
             BottomNavigationBarItem(
-              icon: Icon(_selectedIndex == 4
+              icon: Icon(_selectedIndex == 6
                   ? IconlyBold.infoSquare
                   : IconlyLight.infoSquare),
               label: 'About Us',
