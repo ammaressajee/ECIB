@@ -26,7 +26,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     {'page': const ScaleFinderScreen(), 'title': 'Recording Studio'},
     {'page': const AudioPlayerScreen(), 'title': 'Music Player'},
     {'page': const UserScreen(), 'title': 'User Profile'},
-    {'page': const AboutUsScreen(), 'title': 'About Us'},
+    {'page': const SoundStream(), 'title': 'Sound Lab'},
   ];
 
   void _selectedPage(int index) {
